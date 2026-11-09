@@ -1,0 +1,14 @@
+# Never send local dependencies, secrets or VCS data into the build context
+node_modules
+npm-debug.log*
+.env
+.env.*
+!.env.example
+logs
+*.log
+.git
+.gitignore
+.vscode
+.idea
+Dockerfile
+.dockerignore

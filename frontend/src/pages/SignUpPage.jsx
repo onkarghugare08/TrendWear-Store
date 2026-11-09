@@ -1,0 +1,223 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { UserPlus, Mail, Lock, User, ArrowRight, Loader, Eye, EyeOff, Sparkles, Check, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { useUserStore } from "../stores/useUserStore";
+
+const SignUpPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { signup, loading } = useUserStore();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signup(formData);
+  };
+
+  const passwordsMatch =
+    formData.password &&
+    formData.confirmPassword &&
+    formData.password === formData.confirmPassword;
+
+  return (
+    <div className="w-full min-h-[calc(100vh-80px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        className="w-full max-w-xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="rounded-3xl border border-violet-500/30 bg-slate-900/90 p-8 sm:p-12 shadow-2xl backdrop-blur-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-500/15 px-4 py-1.5 text-xs sm:text-sm font-bold text-violet-300 mb-4 shadow">
+              <Sparkles size={16} className="text-fuchsia-400" />
+              <span>JOIN TRENDWEAR VIP</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              Create Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400">Account</span>
+            </h1>
+            <p className="mt-2 text-sm sm:text-base text-gray-300">
+              Unlock exclusive luxury drops, fast checkout & seasonal rewards
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Full Name */}
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm sm:text-base font-bold text-gray-200 mb-2"
+              >
+                Full Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <User size={20} />
+                </div>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  className="block w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-700 bg-slate-800/90 text-base text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition"
+                  placeholder="e.g. Alex Morgan"
+                />
+              </div>
+            </div>
+
+            {/* Email Address */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm sm:text-base font-bold text-gray-200 mb-2"
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <Mail size={20} />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="block w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-700 bg-slate-800/90 text-base text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition"
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm sm:text-base font-bold text-gray-200 mb-2"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <Lock size={20} />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  className="block w-full pl-12 pr-12 py-3.5 rounded-2xl border border-slate-700 bg-slate-800/90 text-base text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm sm:text-base font-bold text-gray-200"
+                >
+                  Confirm Password
+                </label>
+                {formData.confirmPassword && (
+                  <span
+                    className={`text-xs sm:text-sm font-bold flex items-center gap-1 ${
+                      passwordsMatch ? "text-emerald-400" : "text-rose-400"
+                    }`}
+                  >
+                    {passwordsMatch ? (
+                      <>
+                        <Check size={14} /> Passwords match
+                      </>
+                    ) : (
+                      <>
+                        <X size={14} /> Passwords don't match
+                      </>
+                    )}
+                  </span>
+                )}
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <Lock size={20} />
+                </div>
+                <input
+                  id="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={formData.confirmPassword}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  className="block w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-700 bg-slate-800/90 text-base text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-4 flex items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 py-4 px-6 text-base sm:text-lg font-bold text-white shadow-xl shadow-violet-600/30 transition hover:opacity-95 disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <Loader className="h-5 w-5 animate-spin" />
+                  <span>Creating Account...</span>
+                </>
+              ) : (
+                <>
+                  <UserPlus size={20} />
+                  <span>Sign Up & Claim Perks</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Switch to Login */}
+          <p className="mt-8 text-center text-sm sm:text-base text-gray-300 font-medium">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 hover:opacity-80 transition inline-flex items-center gap-1.5"
+            >
+              Log in here <ArrowRight size={16} />
+            </Link>
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default SignUpPage;
