@@ -34,9 +34,8 @@ services:
   # Tier 1 - Web / presentation
   # ---------------------------------------------------------------------------
   web:
-    build:
-      context: ./frontend
-      target: runtime
+    build: ./frontend
+    image: onkar/trendwear-web:latest
     container_name: trendwear-web
     <<: [*restart-policy, *default-logging]
     ports:
@@ -64,9 +63,8 @@ services:
   # Tier 2 - Application / API
   # ---------------------------------------------------------------------------
   backend:
-    build:
-      context: ./backend
-      target: runtime
+    build: ./backend
+    image: onkar/trendwear-backend:latest
     container_name: trendwear-api
     <<: [*restart-policy, *default-logging]
     environment:
